@@ -1,9 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "DGPCI categorie auto";
 }
 
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .category-radio {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .category-label {
+        border: 3px solid #065693;
+        border-radius: 50px;
+        padding: 8px 25px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.95em;
+    }
+
+    .category-radio:checked + .category-label {
+        background: #065693;
+        color: white;
+    }
+
+    .btn-start {
+        font-size: 23px;
+        background: #065693;
+        border-radius: 5px;
+        padding: 20px 40px;
+        letter-spacing: 3px;
+        position: relative;
+        margin-top: 30px;
+    }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>User Id : @ViewData["UserID"]</p>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h4 class="mb-4">Selectați categoria de examinare:</h4>
+
+                        <!-- Categoriile auto -->
+                        <div class="d-flex flex-wrap justify-content-center mb-3">
+                            <div class="position-relative">
+                                <input type="radio" id="cat1" name="category" class="category-radio">
+                                <label for="cat1" class="category-label">A, A1, A2, AM</label>
+                            </div>
+
+                            <div class="position-relative">
+                                <input type="radio" id="cat2" name="category" class="category-radio">
+                                <label for="cat2" class="category-label">B, B1</label>
+                            </div>
+
+                            <div class="position-relative">
+                                <input type="radio" id="cat3" name="category" class="category-radio">
+                                <label for="cat3" class="category-label">C, C1</label>
+                            </div>
+
+                            <div class="position-relative">
+                                <input type="radio" id="cat4" name="category" class="category-radio">
+                                <label for="cat4" class="category-label">D, D1, Tb, TV</label>
+                            </div>
+
+                            <div class="position-relative">
+                                <input type="radio" id="cat5" name="category" class="category-radio">
+                                <label for="cat5" class="category-label">Tr</label>
+                            </div>
+                        </div>
+
+                        <!-- butonul de start -->
+                        <button class="btn btn-start text-white">
+                            START <span style="margin-left: 15px;">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

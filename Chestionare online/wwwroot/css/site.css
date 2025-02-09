@@ -1,22 +1,53 @@
-html {
-  font-size: 14px;
+﻿body {
+    font-family: 'Roboto', sans-serif;
+    background: white !important;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.navbar {
+    position: relative;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.nav-item.position-absolute {
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.navbar-nav {
+    position: relative;
 }
 
-body {
-  margin-bottom: 60px;
+.nav-item.flex-grow-1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
 }
+
+.nav-item.d-flex {
+    margin-left: auto;
+}
+
+.navbar-nav {
+    flex-grow: 1;
+}
+
+.nav-link.p-0 {
+    padding: 0 !important;
+}
+
+.card {
+    margin-top: 5rem; 
+    border-radius: 15px !important;
+}
+
+.btn-start:hover {
+    background: #054a7a !important;
+    transform: translateY(-2px);
+    box-shadow: 1px 13px 14px -8px rgba(6, 49, 82, 0.56);
+}
+
+.robot-check input {
+    margin-right: 8px;
+    accent-color: #065693;
+}
+
