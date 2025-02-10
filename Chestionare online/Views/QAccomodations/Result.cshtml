@@ -1,0 +1,25 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Rezultat acomodare";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow text-center">
+        <div class="card-body">
+            <h2 class="text-success mb-4">Ai răspuns corect la @Model.CorrectAnswers din @Model.TotalQuestions întrebări</h2>
+
+            <div class="alert alert-warning">
+                <h4>Atenție, începe examenul!</h4>
+                <p class="mb-0">
+                    Testul conține 26 de întrebări și se încheie la expirarea timpului de 30 de minute
+                    sau la depășirea numărului permis de erori
+                </p>
+            </div>
+
+            <a href="#" class="btn btn-lg btn-primary mt-4">
+                START <span style="margin-left: 10px;">→</span>
+            </a>
+        </div>
+    </div>
+</div>

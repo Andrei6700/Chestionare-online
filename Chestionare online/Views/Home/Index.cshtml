@@ -47,41 +47,55 @@
                     <div class="card-body p-5">
                         <h4 class="mb-4">Selectați categoria de examinare:</h4>
 
-                        <!-- Categoriile auto -->
-                        <div class="d-flex flex-wrap justify-content-center mb-3">
-                            <div class="position-relative">
-                                <input type="radio" id="cat1" name="category" class="category-radio">
-                                <label for="cat1" class="category-label">A, A1, A2, AM</label>
+                        @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new { id = "categoryForm" }))
+                        {
+                            <div class="d-flex flex-wrap justify-content-center mb-3">
+                                <div class="position-relative">
+                                    <input type="radio" id="cat1" name="category" class="category-radio" value="A">
+                                    <label for="cat1" class="category-label">A, A1, A2, AM</label>
+                                </div>
+
+                                <div class="position-relative">
+                                    <input type="radio" id="cat2" name="category" class="category-radio" value="B">
+                                    <label for="cat2" class="category-label">B, B1</label>
+                                </div>
+
+                                <div class="position-relative">
+                                    <input type="radio" id="cat3" name="category" class="category-radio" value="C">
+                                    <label for="cat3" class="category-label">C, C1</label>
+                                </div>
+
+                                <div class="position-relative">
+                                    <input type="radio" id="cat4" name="category" class="category-radio" value="D">
+                                    <label for="cat4" class="category-label">D, D1, Tb, TV</label>
+                                </div>
+
+                                <div class="position-relative">
+                                    <input type="radio" id="cat5" name="category" class="category-radio" value="Tr">
+                                    <label for="cat5" class="category-label">Tr</label>
+                                </div>
                             </div>
 
-                            <div class="position-relative">
-                                <input type="radio" id="cat2" name="category" class="category-radio">
-                                <label for="cat2" class="category-label">B, B1</label>
-                            </div>
-
-                            <div class="position-relative">
-                                <input type="radio" id="cat3" name="category" class="category-radio">
-                                <label for="cat3" class="category-label">C, C1</label>
-                            </div>
-
-                            <div class="position-relative">
-                                <input type="radio" id="cat4" name="category" class="category-radio">
-                                <label for="cat4" class="category-label">D, D1, Tb, TV</label>
-                            </div>
-
-                            <div class="position-relative">
-                                <input type="radio" id="cat5" name="category" class="category-radio">
-                                <label for="cat5" class="category-label">Tr</label>
-                            </div>
-                        </div>
-
-                        <!-- butonul de start -->
-                        <button class="btn btn-start text-white">
-                            START <span style="margin-left: 15px;">→</span>
-                        </button>
+                            <button type="submit" class="btn btn-start text-white">
+                                START <span style="margin-left: 15px;">→</span>
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        @* This script will prevent the form from being submitted if no category is selected *@
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            const selectedCategory = document.querySelector('input[name="category"]:checked');
+            if (!selectedCategory) {
+                e.preventDefault();
+                alert('Vă rugăm să selectați o categorie înainte de a continua!');
+            }
+        });
+    </script>
+}

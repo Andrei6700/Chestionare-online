@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Chestionare_online.Areas.Identity.Data;
 using Chestionare_online.Models;
 using Microsoft.AspNetCore.Authorization;

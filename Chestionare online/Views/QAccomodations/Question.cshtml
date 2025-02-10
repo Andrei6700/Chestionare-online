@@ -1,0 +1,53 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Întrebare de acomodare";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h4 class="text-center mb-4">Întrebare de acomodare @Model.QuestionNumber/@Model.TotalQuestions</h4>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Question.Text</h5>
+
+            @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get))
+            {
+                <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
+                <input type="hidden" name="questionId" value="@(Model.QuestionNumber + 1)" />
+                <input type="hidden" name="answers"
+                       value="@(string.Join(",", Model.Answers) + "," + string.Join(",", Context.Request.Query["answer"].ToList()))" />
+                <input type="hidden" name="skippedQuestions" value="@string.Join(",", Model.SkippedQuestions)" />
+
+                <div class="mt-4">
+                    @foreach (var option in Model.Question.Options)
+                    {
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox"
+                                   name="answer"
+                                   id="@option.Key"
+                                   value="@option.Key">
+                            <label class="form-check-label" for="@option.Key">
+                                <strong>@option.Key.</strong> @option.Value
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <button type="button" class="btn btn-secondary"
+                            onclick="window.location.href='@Url.Action("PageQAccomodations", "QAccomodations", new {
+                                category = ViewBag.SelectedCategory,
+                                questionId = Model.QuestionNumber,
+                                answers = Model.Answers,
+                                skippedQuestions = Model.SkippedQuestions,
+                                skip = true
+                            })'">
+                        Răspunde mai târziu
+                    </button>
+                    <button type="submit" class="btn btn-primary">Trimite răspunsul</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

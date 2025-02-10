@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Pagina de acomodare";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    @if (ViewBag.SelectedCategory != null)
+    {
+        <div class="alert alert-info mt-4">
+            Ai selectat categoria: <strong>@ViewBag.SelectedCategory</strong>
+        </div>
+    }
+
+    <div class="text-center mt-5">
+        <a href="@Url.Action("PageQAccomodations", "QAccomodations", new { category = ViewBag.SelectedCategory })"
+           class="btn btn-primary btn-lg">
+            Începe întrebările de acomodare
+        </a>
+    </div>
+</div>
