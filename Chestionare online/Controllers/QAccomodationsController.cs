@@ -5,12 +5,10 @@ using System.Linq;
 
 namespace Chestionare_online.Controllers
 {
-    // controller for the questions
     public class QAccomodationsController : Controller
     {
         private List<Question> _questions = new List<Question>
         {
- // list of the questions with correct answers
             new Question
             {
                 Id = 1,
@@ -48,7 +46,6 @@ namespace Chestionare_online.Controllers
             ViewBag.SelectedCategory = category;
             skippedQuestions ??= new List<int>();
 
-            // initialize firs questiom
             if (questionId == null)
             {
                 return View("Question", new
@@ -57,10 +54,10 @@ namespace Chestionare_online.Controllers
                     QuestionNumber = 1,
                     TotalQuestions = _questions.Count,
                     Answers = new List<string>(),
-                    SkippedQuestions = new List<int>() // list of skipped questions
+                    SkippedQuestions = new List<int>()
                 });
             }
-            // get the current question
+
             int currentIndex = (int)questionId - 1;
 
             if (Request.Query.ContainsKey("skip"))
@@ -69,7 +66,7 @@ namespace Chestionare_online.Controllers
                 {
                     skippedQuestions.Add(currentIndex);
                 }
-                currentIndex++; 
+                currentIndex++;
             }
 
             if (currentIndex >= _questions.Count)
@@ -111,18 +108,18 @@ namespace Chestionare_online.Controllers
 
         private int CalculateScore(List<string> answers)
         {
-            if (answers == null || answers.Count != _questions.Count) return 0;
+            if (answers == null || answers.Count == 0) return 0;
 
             int score = 0;
             for (int i = 0; i < _questions.Count; i++)
             {
-                var correctAnswers = _questions[i].CorrectAnswer.Split(',');
-                var userAnswers = answers[i].Split(',');
+                if (i >= answers.Count) continue;
 
-                bool isPerfectMatch = correctAnswers.Length == userAnswers.Length
-                                   && correctAnswers.All(ca => userAnswers.Contains(ca)); // check if the answers are correct
+                // Se așteaptă ca answers[i] să fie un string cu răspunsurile pentru întrebarea i, separate prin virgulă
+                var correctAnswers = _questions[i].CorrectAnswer.Split(',').OrderBy(x => x).ToArray();
+                var userAnswers = answers[i].Split(',').OrderBy(x => x).ToArray();
 
-                if (isPerfectMatch)
+                if (correctAnswers.SequenceEqual(userAnswers))
                 {
                     score++;
                 }

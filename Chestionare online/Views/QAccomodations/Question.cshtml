@@ -15,18 +15,22 @@
             {
                 <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
                 <input type="hidden" name="questionId" value="@(Model.QuestionNumber + 1)" />
-                <input type="hidden" name="answers"
-                       value="@(string.Join(",", Model.Answers) + "," + string.Join(",", Context.Request.Query["answer"].ToList()))" />
+
+                @if (Model.Answers != null)
+                {
+                    foreach (var ans in Model.Answers)
+                    {
+                        <input type="hidden" name="answers" value="@ans" />
+                    }
+                }
+
                 <input type="hidden" name="skippedQuestions" value="@string.Join(",", Model.SkippedQuestions)" />
 
                 <div class="mt-4">
                     @foreach (var option in Model.Question.Options)
                     {
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox"
-                                   name="answer"
-                                   id="@option.Key"
-                                   value="@option.Key">
+                            <input class="form-check-input" type="checkbox" name="answer" id="@option.Key" value="@option.Key" />
                             <label class="form-check-label" for="@option.Key">
                                 <strong>@option.Key.</strong> @option.Value
                             </label>
@@ -37,12 +41,12 @@
                 <div class="d-flex justify-content-between mt-5">
                     <button type="button" class="btn btn-secondary"
                             onclick="window.location.href='@Url.Action("PageQAccomodations", "QAccomodations", new {
-                                category = ViewBag.SelectedCategory,
-                                questionId = Model.QuestionNumber,
-                                answers = Model.Answers,
-                                skippedQuestions = Model.SkippedQuestions,
-                                skip = true
-                            })'">
+                            category = ViewBag.SelectedCategory,
+                            questionId = Model.QuestionNumber,
+                            answers = Model.Answers,
+                            skippedQuestions = Model.SkippedQuestions,
+                            skip = true
+                        })'">
                         Răspunde mai târziu
                     </button>
                     <button type="submit" class="btn btn-primary">Trimite răspunsul</button>
@@ -52,16 +56,29 @@
     </div>
 </div>
 
- @* script : u need to check a checkbox to the next questin*@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("questionForm").addEventListener("submit", function (e) {
-                let checkboxes = document.querySelectorAll("input[name='answer']:checked");
-                if (checkboxes.length === 0) {
+            var form = document.getElementById("questionForm");
+            form.addEventListener("submit", function (e) {
+				// colect checked values from the checkboxes
+                var selectedAnswers = Array.from(document.querySelectorAll("input[name='answer']:checked"))
+                                           .map(function (cb) { return cb.value; });
+
+                if (selectedAnswers.length === 0) {
                     e.preventDefault();
-                    alert("Selecteaza o varianta de raspuns pentru intrebare !");
+                    alert("Selectează o variantă de răspuns!");
+                    return;
                 }
+
+                // 
+                var newInput = document.createElement("input");
+                newInput.type = "hidden";
+                newInput.name = "answers";
+                newInput.value = selectedAnswers.join(",");
+                form.appendChild(newInput);
+
+                console.log("Trimitem răspunsurile pentru această întrebare:", newInput.value);
             });
         });
     </script>
