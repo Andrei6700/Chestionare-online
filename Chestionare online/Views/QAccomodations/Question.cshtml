@@ -11,7 +11,7 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Question.Text</h5>
 
-            @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get))
+            @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new { id = "questionForm" }))
             {
                 <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
                 <input type="hidden" name="questionId" value="@(Model.QuestionNumber + 1)" />
@@ -51,3 +51,18 @@
         </div>
     </div>
 </div>
+
+ @* script : u need to check a checkbox to the next questin*@
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("questionForm").addEventListener("submit", function (e) {
+                let checkboxes = document.querySelectorAll("input[name='answer']:checked");
+                if (checkboxes.length === 0) {
+                    e.preventDefault();
+                    alert("Selecteaza o varianta de raspuns pentru intrebare !");
+                }
+            });
+        });
+    </script>
+}
