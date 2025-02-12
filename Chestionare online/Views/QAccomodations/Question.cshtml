@@ -1,36 +1,43 @@
 ﻿@model dynamic
 @{
-    ViewData["Title"] = "Întrebare de acomodare";
+    // Sets page title and uses shared layout
+    ViewData["Title"] = "Intrebare de acomodare";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5">
-    <h4 class="text-center mb-4">Întrebare de acomodare @Model.QuestionNumber/@Model.TotalQuestions</h4>
+    <!-- Shows current question number and total -->
+    <h4 class="text-center mb-4">Intrebare (@Model.OrderNumber din @Model.TotalQuestions)</h4>
 
     <div class="card shadow">
         <div class="card-body">
+            <!-- Display question text -->
             <h5 class="card-title">@Model.Question.Text</h5>
 
+            <!-- Form for submitting answers -->
             @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new { id = "questionForm" }))
             {
-                <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
-                <input type="hidden" name="questionId" value="@(Model.QuestionNumber + 1)" />
+                <!-- Hidden fields for important data -->
+                <input type="hidden" name="Category" value="@Model.Category" />
+                <input type="hidden" name="questionQueue" value="@Model.QuestionQueue" />
+                <input type="hidden" name="orderNumber" value="@Model.OrderNumber" />
 
+                <!-- Loop through existing answers -->
                 @if (Model.Answers != null)
                 {
                     foreach (var ans in Model.Answers)
                     {
-                        <input type="hidden" name="answers" value="@ans" />
+                        <input type="hidden" name="answers[@ans.Key]" value="@ans.Value" />
                     }
                 }
 
-                <input type="hidden" name="skippedQuestions" value="@string.Join(",", Model.SkippedQuestions)" />
-
+                <!-- Display answer options -->
                 <div class="mt-4">
                     @foreach (var option in Model.Question.Options)
                     {
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="answer" id="@option.Key" value="@option.Key" />
+                            <!-- Checkbox for answer selection -->
+                            <input class="form-check-input" type="checkbox" data-currentAnswer="true" id="@option.Key" value="@option.Key" />
                             <label class="form-check-label" for="@option.Key">
                                 <strong>@option.Key.</strong> @option.Value
                             </label>
@@ -39,18 +46,12 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-5">
-                    <button type="button" class="btn btn-secondary"
-                            onclick="window.location.href='@Url.Action("PageQAccomodations", "QAccomodations", new {
-                            category = ViewBag.SelectedCategory,
-                            questionId = Model.QuestionNumber,
-                            answers = Model.Answers,
-                            skippedQuestions = Model.SkippedQuestions,
-                            skip = true
-                        })'">
-                        Răspunde mai târziu
-                    </button>
-                    <button type="submit" class="btn btn-primary">Trimite răspunsul</button>
+                    <button type="button" class="btn btn-secondary" id="skipBtn">Raspunde mai tarziu</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Trimite raspunsul</button>
                 </div>
+
+                <!-- Hidden field for skip functionality -->
+                <input type="hidden" name="skip" id="skipInput" value="false" />
             }
         </div>
     </div>
@@ -60,25 +61,37 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var form = document.getElementById("questionForm");
+            var skipBtn = document.getElementById("skipBtn");
+            var skipInput = document.getElementById("skipInput");
+
+            // Handle skip button click
+            skipBtn.addEventListener("click", function () {
+                skipInput.value = "true";
+                form.submit();
+            });
+
+            // Handle form submission
             form.addEventListener("submit", function (e) {
-				// colect checked values from the checkboxes
-                var selectedAnswers = Array.from(document.querySelectorAll("input[name='answer']:checked"))
+                // If skipping, no validation needed
+                if (skipInput.value === "true") return;
+
+                // Get selected checkboxes
+                var selectedAnswers = Array.from(document.querySelectorAll("input[data-currentAnswer='true']:checked"))
                                            .map(function (cb) { return cb.value; });
 
+                // Check if at least one answer is selected
                 if (selectedAnswers.length === 0) {
                     e.preventDefault();
-                    alert("Selectează o variantă de răspuns!");
+                    alert("Selecteaza cel putin o varianta de raspuns!");
                     return;
                 }
 
-                // 
+                // Add hidden input with selected answers
                 var newInput = document.createElement("input");
                 newInput.type = "hidden";
-                newInput.name = "answers";
+                newInput.name = "currentAnswer";
                 newInput.value = selectedAnswers.join(",");
                 form.appendChild(newInput);
-
-                console.log("Trimitem răspunsurile pentru această întrebare:", newInput.value);
             });
         });
     </script>
