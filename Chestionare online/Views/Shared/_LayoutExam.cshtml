@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="ro" style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen auto</title>
+    <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+
+        <div class="header-content">
+            <div class="total-questions">
+                <span>26</span>
+                <strong>Întrebări inițiale</strong>
+            </div>
+            <div class="remaining-questions">
+                <span>26</span>
+                <strong>Întrebări rămase</strong>
+            </div>
+            <div class="timer">
+                <div>30:00</div>
+            </div>
+            <div class="correct-answers">
+                <span style="color:green">0</span>
+                <strong>Răspunsuri corecte</strong>
+            </div>
+            <div class="wrong-answers">
+                <span style="color:red">0</span>
+                <strong>Răspunsuri greșite</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="content">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="footer-nav">
+        <button class="btn btn-2" id="answer_button_id_1">
+            <i class="icon icon-later"></i>
+            <span>Răspunde mai târziu</span>
+        </button>
+        <button class="btn btn-3" id="answer_button_id_2">
+            <i class="icon icon-cancel"></i>
+            <span>Modifică răspunsul</span>
+        </button>
+        <button class="btn btn-4" id="answer_button_id_3">
+            <i class="icon icon-ok"></i>
+            <span>Trimite răspunsul</span>
+        </button>
+    </div>
+
+    <!-- script for timer -->
+    <script>
+        let seconds = 1800; // 30 min
+        function updateTimer() {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            document.querySelector('.timer div').textContent =
+                `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            if (seconds <= 0) clearInterval(timerInterval);
+            seconds--;
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

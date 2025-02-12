@@ -1,0 +1,34 @@
+﻿@model Chestionare_online.Models.QuestionViewModel
+@{
+    ViewData["Title"] = "Examen";
+    Layout = "~/Views/Shared/_LayoutExam.cshtml";
+}
+
+<div class="exam-start">
+    <div class="questions type2">
+        <h1 class="questions-title">@Model.QuestionText</h1>
+        <div class="question-list">
+            @foreach (var option in Model.Options)
+            {
+                <div class="question" id="question_variant_id_@option.Key">
+                    <div class="question-variant">@option.Key</div>
+                    <h4 class="question-title">@option.Value</h4>
+                </div>
+            }
+        </div>
+        <div class="question-image" id="question_image_id">
+@* TODO: here i need to implement via db to display the image*@
+            <img alt="Question Image" src="DSA">
+        </div>
+    </div>
+</div>
+
+<!-- script for select question -->
+<script>
+    document.querySelectorAll('.question').forEach(item => {
+        item.addEventListener('click', event => {
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        });
+    });
+</script>
