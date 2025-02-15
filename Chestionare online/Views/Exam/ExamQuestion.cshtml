@@ -10,55 +10,58 @@
         <div class="question-list">
             @foreach (var option in Model.Options)
             {
-                <div class="question" id="question_variant_id_@option.Key">
+                <div class="question" id="question_variant_id_@option.Key" data-key="@option.Key">
                     <div class="question-variant">@option.Key</div>
                     <h4 class="question-title">@option.Value</h4>
                 </div>
             }
         </div>
-        <div class="question-image" id="question_image_id">
-            <img alt="Question Image" src="DSA">
-        </div>
+        @if (!string.IsNullOrEmpty(Model.ImageURL))
+        {
+            <div class="question-image">
+                <img src="@Model.ImageURL" alt="Imagine întrebare">
+            </div>
+        }
     </div>
 </div>
 
 <form id="answerForm" method="post" asp-action="SubmitAnswer">
-    <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="" />
+    <input type="hidden" id="selectedAnswers" name="selectedAnswers" value="" />
 </form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let selectedAnswer = '';
+        let selectedAnswers = new Set();
 
-        // logic for multiple selection
+        // select the answer
         document.querySelectorAll('.question').forEach(item => {
-            item.addEventListener('click', event => {
-                if (!event.currentTarget.classList.contains('selected')) {
-                    event.currentTarget.classList.add('selected');
-                    selectedAnswer = event.currentTarget.querySelector('.question-variant').textContent;
-                    document.getElementById('selectedAnswer').value = selectedAnswer;
+            item.addEventListener('click', function (event) {
+                const variant = this.dataset.key;
+
+                // Permite DOAR selecția, nu și deselectarea
+                // the user cant deselect. Deselecting is possiblie using "Modifică răspunsul" button
+                //logic copy from DRPCIV :)
+                if (!selectedAnswers.has(variant)) {
+                    selectedAnswers.add(variant);
+                    this.classList.add('selected');
+                    document.getElementById('selectedAnswers').value = Array.from(selectedAnswers).join(',');
                 }
             });
         });
 
-        //logic for "Modify Answer" button
-        const modifyButton = document.getElementById('answer_button_id_2');
-        if (modifyButton) {
-            modifyButton.addEventListener('click', function () {
-                document.querySelectorAll('.question').forEach(q => {
-                    q.classList.remove('selected');
-                });
-                selectedAnswer = '';
-                document.getElementById('selectedAnswer').value = '';
-            });
-        }
+        // btn "Modifică răspunsul" 
+        document.getElementById('answer_button_id_2').addEventListener('click', function () {
+            selectedAnswers.clear();
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
+            document.getElementById('selectedAnswers').value = '';
+        });
 
-        //logic for "Submit Answer" button 
+        //  btn "Trimite răspunsul"
         document.getElementById('answer_button_id_3').addEventListener('click', function () {
-            if (selectedAnswer) {
+            if (selectedAnswers.size > 0) {
                 document.getElementById('answerForm').submit();
             } else {
-                alert('Selectați un răspuns înainte de a trimite!');
+                alert('Selectați cel puțin un răspuns!');
             }
         });
     });

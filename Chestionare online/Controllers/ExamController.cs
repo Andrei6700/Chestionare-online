@@ -96,34 +96,39 @@ namespace Chestionare_online.Controllers
             return View("ExamQuestion", viewModel);
         }
 
+        // function that submit the answer
         [HttpPost]
-        // send the answer to db, then redirect to the next question or to the result page
-        public async Task<IActionResult> SubmitAnswer(string selectedAnswer)
+        public async Task<IActionResult> SubmitAnswer(string selectedAnswers)
         {
+            // get the question from the queue
             var questionQueue = JsonSerializer.Deserialize<List<int>>(
                 HttpContext.Session.GetString("ExamQuestionQueue")) ?? new List<int>();
 
-            if (questionQueue.Count == 0)
-            {
-                return RedirectToAction("ExamResult");
-            }
+            if (questionQueue.Count == 0) return RedirectToAction("ExamResult");
 
-            // check the wrong answers
-            var wrongAnswers = HttpContext.Session.GetInt32("WrongAnswers") ?? 0;
-            if (wrongAnswers >= 4)
-            {
-                return RedirectToAction("FailExam", new { reason = "mistakes" });
-            }
-
-            // chec the good answers 
             var currentQuestionId = questionQueue[0];
-            var correctAnswer = await _context.ExamQuestions
-                .Where(q => q.Id == currentQuestionId)
-                .Select(q => q.CorrectAnswer)
-                .FirstOrDefaultAsync();
+            var question = await _context.ExamQuestions
+                .FirstOrDefaultAsync(q => q.Id == currentQuestionId);
 
-            // update the correct and wrong answers 
-            if (selectedAnswer == correctAnswer)
+            // check the answer
+            var userAnswers = (selectedAnswers ?? "")
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(a => a.Trim().ToUpper())
+                .OrderBy(a => a)
+                .ToList();
+
+            // get the correct answer
+            var correctAnswers = question.CorrectAnswer
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(a => a.Trim().ToUpper())
+                .OrderBy(a => a)
+                .ToList();
+
+            bool isCorrect = userAnswers.Count == correctAnswers.Count &&
+                           userAnswers.SequenceEqual(correctAnswers);
+
+            // up the correct or wrong answers
+            if (isCorrect)
             {
                 HttpContext.Session.SetInt32("CorrectAnswers",
                     (HttpContext.Session.GetInt32("CorrectAnswers") ?? 0) + 1);

@@ -72,9 +72,8 @@
         </button>
     </div>
 
-    <!-- Script for timer -->
     <script>
-        let remainingTime = @ViewBag.RemainingTime; // take remaining time from ViewBag
+        let remainingTime = @ViewBag.RemainingTime;
 
         function updateTimer() {
             if (remainingTime <= 0) {
@@ -86,35 +85,14 @@
             const minutes = Math.floor(remainingTime / 60);
             const seconds = remainingTime % 60;
             document.getElementById('examTimer').textContent =
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`; 
 
             remainingTime--;
         }
 
-        // start the timer when the page is started
         document.addEventListener('DOMContentLoaded', function () {
             updateTimer();
             const timerInterval = setInterval(updateTimer, 1000);
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.question').forEach(item => {
-                item.addEventListener('click', event => {
-                    // remove selected class from all questions
-                    document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
-                    // add selected class
-                    event.currentTarget.classList.add('selected');
-                    // update selected answer
-                    document.getElementById('selectedAnswer').value =
-                        event.currentTarget.querySelector('.question-variant').textContent;
-                });
-            });
-
-            // submit form when the user clicks on the submit button
-            document.getElementById('answer_button_id_2').addEventListener('click', function () {
-                document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
-                document.getElementById('selectedAnswer').value = '';
-            });
         });
     </script>
 </body>
