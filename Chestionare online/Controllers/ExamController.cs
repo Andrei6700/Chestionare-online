@@ -139,6 +139,13 @@ namespace Chestionare_online.Controllers
                     (HttpContext.Session.GetInt32("WrongAnswers") ?? 0) + 1);
             }
 
+            // redirect to fail page if i haeve more that 5 wrong ansers
+            var wrongCount = HttpContext.Session.GetInt32("WrongAnswers") ?? 0;
+            if (wrongCount > 5)
+            {
+                return RedirectToAction("FailExam", new { reason = "mistakes" });
+            }
+
             // remove the question from the queue
             questionQueue.RemoveAt(0);
             HttpContext.Session.SetString("ExamQuestionQueue", JsonSerializer.Serialize(questionQueue));
