@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            font-size: 21px;
+            font-style: italic;
+            font-weight: 400;
+            color: #6d768e;
+            border: none;
+            width: auto;
+            height: auto;
+
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .error-message {
+            font-size: 35px;
+            color: #a52525;;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .dot {
+            position: relative;
+            height: 50px;
+            width: 50px;
+            background-color: #a52525;
+            border-radius: 50%;
+            display: inline-block;
+            padding:10px;
+            margin-bottom: 10px;
+        }
+
+            .dot::before,
+            .dot::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 20px;
+                height: 5px;
+                background-color: white;
+            }
+
+            .dot::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            .dot::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+    </style>
+</head>
+<body>
+    <nav>
+        <span style="font-size: 1.2rem;">Ne pare râu</span>
+    </nav>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+</body>
+</html>
