@@ -10,5 +10,6 @@ namespace Chestionare_online.Models
         public int TotalQuestions { get; set; }
         public int CorrectAnswers { get; set; }
         public int WrongAnswers { get; set; }
+        public string? ImageURL { get; internal set; }
     }
 }
