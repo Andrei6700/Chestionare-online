@@ -27,7 +27,7 @@
 </form>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         let selectedAnswer = '';
 
         // logic for multiple selection
@@ -43,8 +43,8 @@
 
         //logic for "Modify Answer" button
         const modifyButton = document.getElementById('answer_button_id_2');
-        if(modifyButton) {
-            modifyButton.addEventListener('click', function() {
+        if (modifyButton) {
+            modifyButton.addEventListener('click', function () {
                 document.querySelectorAll('.question').forEach(q => {
                     q.classList.remove('selected');
                 });
@@ -54,7 +54,7 @@
         }
 
         //logic for "Submit Answer" button 
-        document.getElementById('answer_button_id_3').addEventListener('click', function() {
+        document.getElementById('answer_button_id_3').addEventListener('click', function () {
             if (selectedAnswer) {
                 document.getElementById('answerForm').submit();
             } else {

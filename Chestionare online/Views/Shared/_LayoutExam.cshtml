@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="ro" style="height: 100%;">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/style.css" rel="stylesheet">
 </head>
+
 <body>
     <header class="header">
         <div class="header-content">
@@ -74,7 +76,7 @@
     <script>
         let remainingTime = @ViewBag.RemainingTime; // take remaining time from ViewBag
 
-        function updateTimer() { 
+        function updateTimer() {
             if (remainingTime <= 0) {
                 clearInterval(timerInterval);
                 window.location.href = "/Exam/FailExam?reason=timeout";
@@ -90,12 +92,12 @@
         }
 
         // start the timer when the page is started
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             updateTimer();
             const timerInterval = setInterval(updateTimer, 1000);
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.question').forEach(item => {
                 item.addEventListener('click', event => {
                     // remove selected class from all questions
@@ -109,11 +111,12 @@
             });
 
             // submit form when the user clicks on the submit button
-            document.getElementById('answer_button_id_2').addEventListener('click', function() {
+            document.getElementById('answer_button_id_2').addEventListener('click', function () {
                 document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
                 document.getElementById('selectedAnswer').value = '';
             });
         });
     </script>
 </body>
+
 </html>

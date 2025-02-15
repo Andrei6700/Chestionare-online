@@ -23,7 +23,7 @@
         font-size: 0.95em;
     }
 
-    .category-radio:checked + .category-label {
+    .category-radio:checked+.category-label {
         background: #065693;
         color: white;
     }
@@ -47,7 +47,11 @@
                     <div class="card-body p-5">
                         <h4 class="mb-4">Selectați categoria de examinare:</h4>
 
-                        @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new { id = "categoryForm" }))
+                        @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new
+                        {
+                            id =
+                                                "categoryForm"
+                        }))
                         {
                             <div class="d-flex flex-wrap justify-content-center mb-3">
                                 <div class="position-relative">
@@ -90,12 +94,12 @@
 @section Scripts {
     <script>
         @* This script will prevent the form from being submitted if no category is selected *@
-        document.getElementById('categoryForm').addEventListener('submit', function(e) {
-            const selectedCategory = document.querySelector('input[name="category"]:checked');
-            if (!selectedCategory) {
-                e.preventDefault();
-                alert('Vă rugăm să selectați o categorie înainte de a continua!');
-            }
-        });
+            document.getElementById('categoryForm').addEventListener('submit', function (e) {
+                const selectedCategory = document.querySelector('input[name="category"]:checked');
+                if (!selectedCategory) {
+                    e.preventDefault();
+                    alert('Vă rugăm să selectați o categorie înainte de a continua!');
+                }
+            });
     </script>
 }
