@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Rezultat examen";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<div class="result-container">
+    <h1>Rezultatul examenului</h1>
+    <div class="score-card">
+        <p>Total întrebări: @ViewBag.Total</p>
+        <p style="color:green">Răspunsuri corecte: @ViewBag.Correct</p>
+        <p style="color:red">Răspunsuri greșite: @ViewBag.Wrong</p>
+    </div>
+    <a href="/Exam/StartExam" class="btn btn-primary">Începe alt examen</a>
+</div>

@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Examen Respins";
+    Layout = "~/Views/Shared/_LayoutExam.cshtml";
+}
+
+<div class="exam-fail">
+    <h1>Ne pare rău</h1>
+    <div class="fail-message">
+        <p>Testul a luat sfârșit.</p>
+        <p class="fail-reason">@ViewBag.FailReason</p>
+        <p>Ați fost declarat RESPINS la examenul de teorie.</p>
+    </div>
+
+    <div class="fail-actions">
+        <a href="/Exam/StartExam" class="btn btn-retry">Încearcă din nou</a>
+    </div>
+</div>
+
+@if (ViewBag.ClearTimer)
+{
+    <script>
+        // reset the timer
+        sessionStorage.removeItem('remainingTime');
+    </script>
+}

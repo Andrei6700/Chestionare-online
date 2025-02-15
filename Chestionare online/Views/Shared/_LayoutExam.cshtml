@@ -12,22 +12,22 @@
 
         <div class="header-content">
             <div class="total-questions">
-                <span>26</span>
+                <span>@ViewBag.TotalQuestions</span> <!-- În loc de 26 -->
                 <strong>Întrebări inițiale</strong>
             </div>
             <div class="remaining-questions">
-                <span>26</span>
+                <span>@ViewBag.RemainingQuestions</span> <!-- În loc de 26 -->
                 <strong>Întrebări rămase</strong>
             </div>
             <div class="timer">
                 <div>30:00</div>
             </div>
             <div class="correct-answers">
-                <span style="color:green">0</span>
+                <span style="color:green">@(Context.Session.GetInt32("CorrectAnswers") ?? 0)</span>
                 <strong>Răspunsuri corecte</strong>
             </div>
             <div class="wrong-answers">
-                <span style="color:red">0</span>
+                <span style="color:red">@(Context.Session.GetInt32("WrongAnswers") ?? 0)</span>
                 <strong>Răspunsuri greșite</strong>
             </div>
         </div>
@@ -62,16 +62,28 @@
 
     <!-- script for timer -->
     <script>
-        let seconds = 1800; // 30 min
+        let seconds = @ViewBag.RemainingTime; // Folosim timpul rămas calculat pe server
+
         function updateTimer() {
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                alert("Timpul a expirat!");
+                window.location.href = "/Exam/FailExam?reason=timeout"; // Redirecționează dacă timpul expiră
+                return;
+            }
+
             const m = Math.floor(seconds / 60);
             const s = seconds % 60;
             document.querySelector('.timer div').textContent =
                 `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            if (seconds <= 0) clearInterval(timerInterval);
             seconds--;
         }
-        const timerInterval = setInterval(updateTimer, 1000);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        });
     </script>
+
 </body>
 </html>

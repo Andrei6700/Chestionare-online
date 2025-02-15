@@ -2,7 +2,8 @@
 
 namespace Chestionare_online.Models
 {
-    public class QuestionViewModel 
+    // class used to display a question in the exam
+    public class QuestionViewModel
     {
         public string QuestionText { get; set; }
         public Dictionary<string, string> Options { get; set; }
@@ -13,3 +14,4 @@ namespace Chestionare_online.Models
         public string? ImageURL { get; internal set; }
     }
 }
+

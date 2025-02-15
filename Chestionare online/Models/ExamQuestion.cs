@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Chestionare_online.Models
 {
-    public class ExamQuestion 
+    // class used to store a question in the database
+    public class ExamQuestion
     {
         [Key]
         public int Id { get; set; }

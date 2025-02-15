@@ -22,27 +22,44 @@
     </div>
 </div>
 
+<form id="answerForm" method="post" asp-action="SubmitAnswer">
+    <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="" />
+</form>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // select multiple answers
+        let selectedAnswer = '';
+
+        // logic for multiple selection
         document.querySelectorAll('.question').forEach(item => {
             item.addEventListener('click', event => {
                 if (!event.currentTarget.classList.contains('selected')) {
                     event.currentTarget.classList.add('selected');
+                    selectedAnswer = event.currentTarget.querySelector('.question-variant').textContent;
+                    document.getElementById('selectedAnswer').value = selectedAnswer;
                 }
             });
         });
 
-        //  "Modifică răspunsul" logic script
+        //logic for "Modify Answer" button
         const modifyButton = document.getElementById('answer_button_id_2');
         if(modifyButton) {
             modifyButton.addEventListener('click', function() {
                 document.querySelectorAll('.question').forEach(q => {
                     q.classList.remove('selected');
                 });
+                selectedAnswer = '';
+                document.getElementById('selectedAnswer').value = '';
             });
-        } else {
-            console.error('Butonul "Modifică răspunsul" nu a fost găsit!');
         }
+
+        //logic for "Submit Answer" button 
+        document.getElementById('answer_button_id_3').addEventListener('click', function() {
+            if (selectedAnswer) {
+                document.getElementById('answerForm').submit();
+            } else {
+                alert('Selectați un răspuns înainte de a trimite!');
+            }
+        });
     });
 </script>
