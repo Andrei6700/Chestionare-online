@@ -17,18 +17,32 @@
             }
         </div>
         <div class="question-image" id="question_image_id">
-@* TODO: here i need to implement via db to display the image*@
             <img alt="Question Image" src="DSA">
         </div>
     </div>
 </div>
 
-<!-- script for select question -->
 <script>
-    document.querySelectorAll('.question').forEach(item => {
-        item.addEventListener('click', event => {
-            document.querySelectorAll('.question').forEach(q => q.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
+    document.addEventListener('DOMContentLoaded', function() {
+        // select multiple answers
+        document.querySelectorAll('.question').forEach(item => {
+            item.addEventListener('click', event => {
+                if (!event.currentTarget.classList.contains('selected')) {
+                    event.currentTarget.classList.add('selected');
+                }
+            });
         });
+
+        //  "Modifică răspunsul" logic script
+        const modifyButton = document.getElementById('answer_button_id_2');
+        if(modifyButton) {
+            modifyButton.addEventListener('click', function() {
+                document.querySelectorAll('.question').forEach(q => {
+                    q.classList.remove('selected');
+                });
+            });
+        } else {
+            console.error('Butonul "Modifică răspunsul" nu a fost găsit!');
+        }
     });
 </script>
