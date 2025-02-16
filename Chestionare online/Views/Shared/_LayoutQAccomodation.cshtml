@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html lang="ro" style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://dgpci.mai.gov.ro/dlexam/assets/css/style.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet">
+</head>
+<body>
+    <main class="content-wrap">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,99 +1,113 @@
 ﻿@model dynamic
 @{
-    // Sets page title and uses shared layout
     ViewData["Title"] = "Intrebare de acomodare";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutQAccomodation.cshtml";
 }
 
-<div class="container mt-5">
-    <!-- Shows current question number and total -->
-    <h4 class="text-center mb-4">Intrebare (@Model.OrderNumber din @Model.TotalQuestions)</h4>
+<div class="site">
+    <header class="header">
+        <div class="header-content">
+            <h3 class="header-title">Întrebare de acomodare @Model.OrderNumber/@Model.TotalQuestions</h3>
+        </div>
+    </header>
 
-    <div class="card shadow">
-        <div class="card-body">
-            <!-- Display question text -->
-            <h5 class="card-title">@Model.Question.Text</h5>
-
-            <!-- Form for submitting answers -->
-            @using (Html.BeginForm("PageQAccomodations", "QAccomodations", FormMethod.Get, new { id = "questionForm" }))
-            {
-                <!-- Hidden fields for important data -->
-                <input type="hidden" name="Category" value="@Model.Category" />
-                <input type="hidden" name="questionQueue" value="@Model.QuestionQueue" />
-                <input type="hidden" name="orderNumber" value="@Model.OrderNumber" />
-
-                <!-- Loop through existing answers -->
-                @if (Model.Answers != null)
-                {
-                    foreach (var ans in Model.Answers)
-                    {
-                        <input type="hidden" name="answers[@ans.Key]" value="@ans.Value" />
-                    }
-                }
-
-                <!-- Display answer options -->
-                <div class="mt-4">
-                    @foreach (var option in Model.Question.Options)
-                    {
-                        <div class="form-check mb-3">
-                            <!-- Checkbox for answer selection -->
-                            <input class="form-check-input" type="checkbox" data-currentAnswer="true" id="@option.Key"
-                                value="@option.Key" />
-                            <label class="form-check-label" for="@option.Key">
-                                <strong>@option.Key.</strong> @option.Value
-                            </label>
+    <div class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="accommodation-test">
+                        <div class="questions">
+                            <h1 class="questions-title" style="
+    justify-content: center;
+    align-items: center;
+    display: flex;
+">
+                                @Model.Question.Text
+                            </h1>
+                            <div class="question-list type1">
+                                @foreach (var option in Model.Question.Options)
+                                {
+                                    <div class="question"
+                                         data-option="@option.Key"
+                                         onclick="toggleSelection(this)">
+                                        <div class="question-variant">@option.Key</div>
+                                        <h4 class="question-title">@option.Value</h4>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    }
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="d-flex justify-content-between mt-5">
-                    <button type="button" class="btn btn-secondary" id="skipBtn">Raspunde mai tarziu</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Trimite raspunsul</button>
-                </div>
-
-                <!-- Hidden field for skip functionality -->
-                <input type="hidden" name="skip" id="skipInput" value="false" />
-            }
+        <div class="footer-nav">
+            <button class="btn btn-2" type="button" id="skipBtn">
+                <span>Răspunde mai târziu</span>
+            </button>
+            <button class="btn btn-3" type="button" id="changeBtn">
+                <span>Modifică răspunsul</span>
+            </button>
+            <button class="btn btn-4" type="button" id="submitBtn">
+                <span>Trimite răspunsul</span>
+            </button>
         </div>
     </div>
 </div>
 
+<form id="hiddenForm" method="get" style="display: none;">
+    <input type="hidden" name="Category" value="@Model.Category" />
+    <input type="hidden" name="questionQueue" value="@Model.QuestionQueue" />
+    <input type="hidden" name="orderNumber" value="@Model.OrderNumber" />
+    <input type="hidden" name="currentAnswer" id="selectedAnswers" />
+    <input type="hidden" name="skip" id="skipInput" value="false" />
+    @if (Model.Answers != null)
+    {
+        foreach (var ans in Model.Answers)
+        {
+            <input type="hidden" name="answers[@ans.Key]" value="@ans.Value" />
+        }
+    }
+</form>
+
 @section Scripts {
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var form = document.getElementById("questionForm");
-            var skipBtn = document.getElementById("skipBtn");
-            var skipInput = document.getElementById("skipInput");
+        let selectedOptions = [];
 
-            // Handle skip button click
-            skipBtn.addEventListener("click", function () {
-                skipInput.value = "true";
-                form.submit();
-            });
+            function toggleSelection(element) {
+            const option = element.getAttribute('data-option');
 
-            // Handle form submission
-            form.addEventListener("submit", function (e) {
-                // If skipping, no validation needed
-                if (skipInput.value === "true") return;
+             if (selectedOptions.includes(option)) {
+                return;
+            }
 
-                // Get selected checkboxes
-                var selectedAnswers = Array.from(document.querySelectorAll("input[data-currentAnswer='true']:checked"))
-                    .map(function (cb) { return cb.value; });
+            element.classList.add('selected');
+            selectedOptions.push(option);
 
-                // Check if at least one answer is selected
-                if (selectedAnswers.length === 0) {
-                    e.preventDefault();
-                    alert("Selecteaza cel putin o varianta de raspuns!");
-                    return;
-                }
+            updateUI();
+        }
 
-                // Add hidden input with selected answers
-                var newInput = document.createElement("input");
-                newInput.type = "hidden";
-                newInput.name = "currentAnswer";
-                newInput.value = selectedAnswers.join(",");
-                form.appendChild(newInput);
-            });
+        function updateUI() {
+            document.getElementById('selectedAnswers').value = selectedOptions.join(',');
+        }
+
+        document.getElementById('skipBtn').addEventListener('click', () => {
+            document.getElementById('skipInput').value = 'true';
+            document.getElementById('hiddenForm').submit();
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            if (selectedOptions.length === 0) {
+                alert('Selectați cel puțin o opțiune!');
+                return;
+            }
+            document.getElementById('hiddenForm').submit();
+        });
+
+        document.getElementById('changeBtn').addEventListener('click', () => {
+            selectedOptions = [];
+            document.querySelectorAll('.question.selected').forEach(el => el.classList.remove('selected'));
+            updateUI();
         });
     </script>
 }
